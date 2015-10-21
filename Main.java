@@ -2,6 +2,14 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
+/* TODO
+* 10/21 7:42 PM:
+* ADD Miles per Gallon dependent on type, ADD KBBValue dependent on year
+* ADD additional MMTPacket objects to MMTPackets array
+*
+* */
+
+
 public class Main {
 
     static class Vehicle{
