@@ -2,9 +2,9 @@ Queries
 
 1. Select all attributes where type of car is "Sedan". 
 
-2. Select all attributes where the model of the car is "Honda"
+2. Select all attributes where the make of the car is "Honda"
 
-3. Select all attributes where the MPG of the car is greater than 20 and the car is sedan.
+3. Select all attributes where the MPG of the car is greater than 20 and the car is a sedan.
 
 4. Select all attributes where the car is a sedan and has leather seats. (This is accomplished by a query within a query, where all cars that are sedans are selected from the cars table first and then each specific car is looked up in the Options table via the selected car's VIN.)
 
