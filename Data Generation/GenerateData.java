@@ -22,6 +22,7 @@ public class GenerateData
 		String used;
 		int miles;
 		int KBBValue;
+		int rentalPrice;
 		int MPG;
 		String SellerID;
 
@@ -43,6 +44,7 @@ public class GenerateData
 			this.used = generateUsed();
 			this.miles = generateMiles();
 			this.KBBValue = generateKBB();
+			this.rentalPrice = generateRentalPrice();
 			this.MPG = generateMPG();
 			this.SellerID = generateSellerID();
 
@@ -193,6 +195,11 @@ public class GenerateData
 			return ThreadLocalRandom.current().nextInt(l, h);
 		}
 
+		private int generateRentalPrice()
+		{
+			return ThreadLocalRandom.current().nextInt(30, 200);
+		}
+
 		private int generateMPG()
 		{
 			int l = 0, h = 0;
@@ -301,7 +308,6 @@ public class GenerateData
 		String city;
 		String state;
 		String ZIP;
-		int rentalPrice;
 		double latitude;
 		double longitude;
 
@@ -314,7 +320,6 @@ public class GenerateData
 			this.city = generateCity();
 			this.state = generateState();
 			this.ZIP = generateZIP();
-			this.rentalPrice = generateRentalPrice();
 			this.latitude = generateLatitude();
 			this.longitude = generateLongitude();
 		}
@@ -350,11 +355,6 @@ public class GenerateData
 		private String generateZIP()
 		{
 			return null;
-		}
-
-		private int generateRentalPrice()
-		{
-			return ThreadLocalRandom.current().nextInt(30, 200);
 		}
 
 		private double generateLatitude()
@@ -422,14 +422,14 @@ public class GenerateData
 	private static void printVehicles()
 	{
 		System.out.println("--------------------------------------------------------------Table 1 - Vehicles-------------------------------------------------------------");
-		System.out.printf("%3s %17s%12s%12s%12s%12s%12s%12s%12s%12s%12s%12s\n", "#", "VIN", "Make", "Model", "Type", "Year", "Color", "Miles", "Used/New", "SellerID", "KBB", "MPG");
+		System.out.printf("%3s %17s%12s%12s%12s%12s%12s%12s%12s%12s%12s%12s%12s\n", "#", "VIN", "Make", "Model", "Type", "Year", "Color", "Miles", "Used/New", "SellerID", "KBB", "RentalPrice", "MPG");
 
 		int i=0;
 		for (Vehicle v : vehicles)
 		{
 			i++;
 			// "#", "VIN", "Make", "Model", "Type", "Year", "Color", "Miles", "Used", "SellerID", "KBB", "MPG"
-			System.out.printf("%03d %17s%12s%12s%12s%12d%12s%12d%12s%12s%12d%12d\n", i, v.VIN, v.make, v.model, v.type, v.year, v.color, v.miles, v.used, v.SellerID, v.KBBValue, v.MPG);
+			System.out.printf("%03d %17s%12s%12s%12s%12d%12s%12d%12s%12s%12d%12d%12d\n", i, v.VIN, v.make, v.model, v.type, v.year, v.color, v.miles, v.used, v.SellerID, v.KBBValue, v.rentalPrice, v.MPG);
 		}
 	}
 
@@ -437,12 +437,12 @@ public class GenerateData
 	{
 		PrintWriter writer = new PrintWriter("vehicles.csv", "UTF-8");
 
-		writer.printf("%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s\n", "VIN", "Make", "Model", "Type", "Year", "Color", "Miles", "Used/New", "SellerID", "KBB", "MPG");
+		writer.printf("%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s\n", "VIN", "Make", "Model", "Type", "Year", "Color", "Miles", "Used/New", "SellerID", "KBB", "Daily Rental Price", "MPG");
 
 		for (Vehicle v : vehicles)
 		{
 			// "VIN", "Make", "Model", "Type", "Year", "Color", "Miles", "Used", "SellerID", "KBB", "MPG"
-			writer.printf("%s,%s,%s,%s,%d,%s,%d,%s,%s,%d,%d\n", v.VIN, v.make, v.model, v.type, v.year, v.color, v.miles, v.used, v.SellerID, v.KBBValue, v.MPG);
+			writer.printf("%s,%s,%s,%s,%d,%s,%d,%s,%s,%d,%d,%d\n", v.VIN, v.make, v.model, v.type, v.year, v.color, v.miles, v.used, v.SellerID, v.KBBValue, v.rentalPrice, v.MPG);
 		}
 
 		writer.close();
@@ -480,14 +480,14 @@ public class GenerateData
 	private static void printSellers()
 	{
 		System.out.println("--------------------------------------------------------------Table 3 - Sellers--------------------------------------------------------------");
-		System.out.printf("%3s %17s%12s%12s%12s%12s%12s%12s%12s%12s%12s\n", "#", "SellerID", "Type", "Neighborhood", "Street", "City", "State", "ZIP Code", "RentalPrice", "Lat", "Long");
+		System.out.printf("%3s %17s%12s%12s%12s%12s%12s%12s%12s%12s\n", "#", "SellerID", "Type", "Neighborhood", "Street", "City", "State", "ZIP Code", "Lat", "Long");
 
 		int i=0;
 		for (Seller s : sellers)
 		{
 			i++;
 			// "#", "SellerID", "Type", "Neighborhood", "Street", "City", "State", "ZIP Code", "Brand"
-			System.out.printf("%03d %17s%12s%12s%12s%12s%12s%12s%12d%12f%12f\n", i, s.sellerID, s.sellerType, s.neighborhood, s.street, s.city, s.state, s.ZIP, s.rentalPrice, s.latitude, s.longitude);
+			System.out.printf("%03d %17s%12s%12s%12s%12s%12s%12s%12f%12f\n", i, s.sellerID, s.sellerType, s.neighborhood, s.street, s.city, s.state, s.ZIP, s.latitude, s.longitude);
 		}
 	}
 
@@ -495,12 +495,12 @@ public class GenerateData
 	{
 		PrintWriter writer = new PrintWriter("sellers.csv", "UTF-8");
 
-		writer.printf("%s,%s,%s,%s,%s\n", "SellerID", "Type", "RentalPrice", "Latitude", "longitude");
+		writer.printf("%s,%s,%s,%s\n", "SellerID", "Type", "Latitude", "Longitude");
 
 		for (Seller s : sellers)
 		{
-			// "SellerID", "Type", "Neighborhood", "Street", "City", "State", "ZIP Code", "Brand"
-			writer.printf("%s,%s,%d,%f,%f\n", s.sellerID, s.sellerType, s.rentalPrice, s.latitude, s.longitude);
+			// "SellerID", "Type", "Latitude", "Longitude"
+			writer.printf("%s,%s,%f,%f\n", s.sellerID, s.sellerType, s.latitude, s.longitude);
 		}
 
 		writer.close();
