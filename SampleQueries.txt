@@ -1,0 +1,13 @@
+Queries
+
+1. Select all attributes where type of car is "Sedan". 
+
+2. Select all attributes where the model of the car is "Honda"
+
+3. Select all attributes where the MPG of the car is greater than 20 and the car is sedan.
+
+4. Select all attributes where the car is a sedan and has leather seats. (This is accomplished by a query within a query, where all cars that are sedans are selected from the cars table first and then each specific car is looked up in the Options table via the selected car's VIN.)
+
+5. Select all cars that are within 10 miles of my address. (This is accomplished by first going through the sellers table and using the seller's address information to compare with the person's current address the mileage distance. If the distance is within the specified range, which in this case is 10 miles, then we search the cars table with the seller's SellerId. We do this for every seller whose address is shown to be within 10 miles, and the final list will be all cars that are registered to all of those sellers.)
+
+6. Select all cars that are sedans that have leather seats that are within 10 miles. (Search all cars that are within 10 miles first via the seller's table, then find the ones that are sedans via the cars table, and of those, search through the options table with the specified VIN has a leather seating option.
