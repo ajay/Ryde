@@ -4,18 +4,15 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.io.PrintWriter;
 import java.io.IOException;
 
-/* TODO
-* 10/21 7:42 PM:
-* ADD Miles per Gallon dependent on type, ADD KBBValue dependent on year
-* ADD additional MMTPacket objects to MMTPackets array
-*
-* */
+/*
+ * ayyyy lmao
+ */
 
 public class GenerateData
 {
 	static class Vehicle
 	{
-		// Table 1
+		// Table 1: Vehicles
 		String VIN;
 		String make;
 		String model;
@@ -28,7 +25,14 @@ public class GenerateData
 		int MPG;
 		String SellerID;
 
-		public Vehicle(String VIN, String make, String model, String type)
+		// Table 2: Options
+		String leatherSeats;
+		String FourWheelDrive;
+		String fogLights;
+		String DVDPlayer;
+		String SurroundSound;
+
+		public Vehicle(String make, String model, String type)
 		{
 			this.VIN = generateVIN();
 			this.make = make;
@@ -41,6 +45,12 @@ public class GenerateData
 			this.KBBValue = generateKBB();
 			this.MPG = generateMPG();
 			this.SellerID = generateSellerID();
+
+			this.leatherSeats = generateLeatherSeats();
+			this.FourWheelDrive = generateFourWheelDrive();
+			this.fogLights = generateFogLights();
+			this.DVDPlayer = generateDVD();
+			this.SurroundSound = generateSurroundSound();
 		}
 
 		private String generateVIN()
@@ -232,6 +242,83 @@ public class GenerateData
 
 			return id;
 		}
+
+		private String generateLeatherSeats()
+		{
+			if (this.type.equals("Luxury"))
+				return "Yes";
+
+			Random r = new Random();
+			return yesNo[r.nextInt(yesNo.length)];
+		}
+
+		private String generateFourWheelDrive()
+		{
+			if (this.type.equals("Truck") || this.type.equals("SUV"))
+				return "Yes";
+
+			Random r = new Random();
+			return yesNo[r.nextInt(yesNo.length)];
+		}
+
+		private String generateFogLights()
+		{
+			Random r = new Random();
+			return yesNo[r.nextInt(yesNo.length)];
+		}
+
+		private String generateDVD()
+		{
+			Random r = new Random();
+			return yesNo[r.nextInt(yesNo.length)];
+		}
+
+		private String generateSurroundSound()
+		{
+			Random r = new Random();
+			return yesNo[r.nextInt(yesNo.length)];
+		}
+	}
+
+	private static void populateVehicles()
+	{
+		for (int i=0; i<vehicles.length; i++)
+		{
+			Random r = new Random();
+			MMTPacket currMMT = mmtPackets.get(r.nextInt(mmtPackets.size()));
+			vehicles[i] = new Vehicle(currMMT.make, currMMT.model, currMMT.type);
+		}
+	}
+
+	static class Seller
+	{
+		String sellerID;
+		String sellerType;
+		String neighborhood;
+		String street;
+		String city;
+		String state;
+		String ZIP;
+		String brand;
+
+		public Seller(String id)
+		{
+			this.sellerID = id;
+		}
+
+		// private generateType()
+		// {
+		// 	if (vehicles.contains)
+		// }
+	}
+
+	private static void populateSellers()
+	{
+		for (String id : SellerIDs)
+		{
+			Seller s = new Seller(id);
+			sellers.add(s);
+		}
 	}
 
 	static class MMTPacket
@@ -260,20 +347,23 @@ public class GenerateData
 		mmtPackets.add(new MMTPacket("Ford", "F150", "Truck"));
 	}
 
-	private static void printData(Vehicle[] vehicles)
+
+
+	private static void printVehicles()
 	{
+		System.out.println("--------------------------------------------------------------Table 1 - Vehicles-------------------------------------------------------------");
 		System.out.printf("%3s %17s%12s%12s%12s%12s%12s%12s%12s%12s%12s%12s\n", "#", "VIN", "Make", "Model", "Type", "Year", "Color", "Miles", "Used/New", "SellerID", "KBB", "MPG");
 
 		int i=0;
 		for (Vehicle v : vehicles)
 		{
 			i++;
-			// "VIN", "Make", "Model", "Type", "Year", "Color", "Miles", "Used", "SellerID", "KBB", "MPG"
+			// "#", "VIN", "Make", "Model", "Type", "Year", "Color", "Miles", "Used", "SellerID", "KBB", "MPG"
 			System.out.printf("%03d %17s%12s%12s%12s%12d%12s%12d%12s%12s%12d%12d\n", i, v.VIN, v.make, v.model, v.type, v.year, v.color, v.miles, v.used, v.SellerID, v.KBBValue, v.MPG);
 		}
 	}
 
-	private static void printVehiclesCSV(Vehicle[] vehicles) throws IOException
+	private static void printVehiclesCSV() throws IOException
 	{
 		PrintWriter writer = new PrintWriter("vehicles.csv", "UTF-8");
 
@@ -288,35 +378,93 @@ public class GenerateData
 		writer.close();
 	}
 
+	private static void printOptions()
+	{
+		System.out.println("--------------------------------------------------------------Table 2 - Options--------------------------------------------------------------");
+		System.out.printf("%3s %17s%12s%12s%12s%12s%12s\n", "#", "VIN", "Leather", "4WD", "Fog Lights", "DVD Player", "Surround");
+
+		int i=0;
+		for (Vehicle v : vehicles)
+		{
+			i++;
+			// "#", "VIN", "LeatherSeats", "4WD", "Fog Lights", "DVD Player", "Surround"
+			System.out.printf("%03d %17s%12s%12s%12s%12s%12s\n", i, v.VIN, v.leatherSeats, v.FourWheelDrive, v.fogLights, v.DVDPlayer, v.SurroundSound);
+		}
+	}
+
+	private static void printOptionsCSV() throws IOException
+	{
+		PrintWriter writer = new PrintWriter("options.csv", "UTF-8");
+
+		writer.printf("%s,%s,%s,%s,%s,%s\n", "VIN", "Leather", "4WD", "Fog Lights", "DVD Player", "Surround");
+
+		for (Vehicle v : vehicles)
+		{
+			// "VIN", "LeatherSeats", "4WD", "Fog Lights", "DVD Player", "Surround"
+			writer.printf("%s,%s,%s,%s,%s,%s\n", v.VIN, v.leatherSeats, v.FourWheelDrive, v.fogLights, v.DVDPlayer, v.SurroundSound);
+		}
+
+		writer.close();
+	}
+
+	private static void printSellers()
+	{
+		System.out.println("--------------------------------------------------------------Table 3 - Sellers--------------------------------------------------------------");
+		System.out.printf("%3s %17s%12s%12s%12s%12s%12s%12s%12s\n", "#", "SellerID", "Type", "Neighborhood", "Street", "City", "State", "ZIP Code", "Brand");
+
+		int i=0;
+		for (Seller s : sellers)
+		{
+			i++;
+			// "#", "SellerID", "Type", "Neighborhood", "Street", "City", "State", "ZIP Code", "Brand"
+			System.out.printf("%03d %17s%12s%12s%12s%12s%12s%12s%12s\n", i, s.sellerID, s.sellerType, s.neighborhood, s.street, s.city, s.state, s.ZIP, s.brand);
+		}
+	}
+
+	private static void printSellersCSV() throws IOException
+	{
+		PrintWriter writer = new PrintWriter("sellers.csv", "UTF-8");
+
+		writer.printf("%s,%s,%s,%s,%s,%s,%s,%s\n", "SellerID", "Type", "Neighborhood", "Street", "City", "State", "ZIP Code", "Brand");
+
+		for (Seller s : sellers)
+		{
+			// "SellerID", "Type", "Neighborhood", "Street", "City", "State", "ZIP Code", "Brand"
+			writer.printf("%s,%s,%s,%s,%s,%s,%s,%s\n", s.sellerID, s.sellerType, s.neighborhood, s.street, s.city, s.state, s.ZIP, s.brand);
+		}
+
+		writer.close();
+	}
+
 	static ArrayList<String> uniqueVINs = new ArrayList<String>();
 	static ArrayList<String> SellerIDs = new ArrayList<String>();
+	static ArrayList<Seller> sellers = new ArrayList<Seller>();
 	static ArrayList<MMTPacket> mmtPackets = new ArrayList<MMTPacket>();
+	static Vehicle[] vehicles = new Vehicle[100];
+	static String[] yesNo = {"Yes", "No"};
+
 
 	public static void main(String[] args)
 	{
 		addPackets();
+		populateVehicles();
+		populateSellers();
 
-		Vehicle[] vehicles = new Vehicle[100];
-
-		for (int i =0; i<vehicles.length; i++)
-		{
-			Random r = new Random();
-			MMTPacket currMMT = mmtPackets.get(r.nextInt(mmtPackets.size()));
-			vehicles[i] = new Vehicle("abctest", currMMT.make, currMMT.model, currMMT.type);
-		}
-
-		printData(vehicles);
+		printVehicles();
+		System.out.println();
+		printOptions();
+		System.out.println();
+		printSellers();
 
 		try
 		{
-			printVehiclesCSV(vehicles);
+			printVehiclesCSV();
+			printOptionsCSV();
+			printSellersCSV();
 		}
 		catch (IOException e)
 		{
 			e.printStackTrace();
 		}
-
-		System.out.println(uniqueVINs.size());
-		System.out.println(SellerIDs.size());
 	}
 }
