@@ -202,6 +202,8 @@ public class GenerateData
 				{ l = 20; h = 45; }
 			else if (this.type.equals("Electric"))
 				{ l = 90; h = 200; }
+			else if (this.type.equals("Hatchback"))
+				{ l = 30; h = 60; }
 			else if (this.type.equals("Hybrid"))
 				{ l = 30; h = 60; }
 			else if (this.type.equals("Luxury"))
@@ -299,17 +301,75 @@ public class GenerateData
 		String city;
 		String state;
 		String ZIP;
-		String brand;
+		int rentalPrice;
+		double latitude;
+		double longitude;
 
 		public Seller(String id)
 		{
 			this.sellerID = id;
+			this.sellerType = generateType();
+			this.neighborhood = generateNeighborhood();
+			this.street = generateStreet();
+			this.city = generateCity();
+			this.state = generateState();
+			this.ZIP = generateZIP();
+			this.rentalPrice = generateRentalPrice();
+			this.latitude = generateLatitude();
+			this.longitude = generateLongitude();
 		}
 
-		// private generateType()
-		// {
-		// 	if (vehicles.contains)
-		// }
+		private String generateType()
+		{
+			int a = ThreadLocalRandom.current().nextInt(0, 2);
+			if (a == 1)
+				return "Dealership";
+			return "Private";
+		}
+
+		private String generateNeighborhood()
+		{
+			return null;
+		}
+
+		private String generateStreet()
+		{
+			return null;
+		}
+
+		private String generateCity()
+		{
+			return null;
+		}
+
+		private String generateState()
+		{
+			return null;
+		}
+
+		private String generateZIP()
+		{
+			return null;
+		}
+
+		private int generateRentalPrice()
+		{
+			return ThreadLocalRandom.current().nextInt(30, 200);
+		}
+
+		private double generateLatitude()
+		{
+			double low = 40.7142700;
+			double high = 40.730644;
+			return ThreadLocalRandom.current().nextDouble(low, high);
+		}
+
+		private double generateLongitude()
+		{
+			double low = 73.9525929;
+			double high = 74.0030869;
+			return -ThreadLocalRandom.current().nextDouble(low, high);
+		}
 	}
 
 	private static void populateSellers()
@@ -343,11 +403,21 @@ public class GenerateData
 		mmtPackets.add(new MMTPacket("Honda", "Civic", "Sedan"));
 		mmtPackets.add(new MMTPacket("Toyota", "Camry", "Coupe"));
 		mmtPackets.add(new MMTPacket("Toyota", "Camry", "Sedan"));
+		mmtPackets.add(new MMTPacket("Toyota", "Corolla", "Coupe"));
+		mmtPackets.add(new MMTPacket("Toyota", "Corolla", "Sedan"));
+		mmtPackets.add(new MMTPacket("Nissan", "Altima", "Coupe"));
+		mmtPackets.add(new MMTPacket("Nissan", "Altima", "Sedan"));
+		mmtPackets.add(new MMTPacket("Nissan", "Maxima", "Coupe"));
+		mmtPackets.add(new MMTPacket("Nissan", "Maxima", "Sedan"));
 		mmtPackets.add(new MMTPacket("Tesla", "Model S", "Electric"));
+		mmtPackets.add(new MMTPacket("Volkswagen", "Jetta", "Sedan"));
+		mmtPackets.add(new MMTPacket("Volkswagen", "Passat", "Sedan"));
+		mmtPackets.add(new MMTPacket("Volkswagen", "GTI", "Hatchback"));
+		mmtPackets.add(new MMTPacket("BMW", "335i", "Luxury"));
+		mmtPackets.add(new MMTPacket("BMW", "M3", "Sports"));
+		mmtPackets.add(new MMTPacket("Ford", "Explorer", "SUV"));
 		mmtPackets.add(new MMTPacket("Ford", "F150", "Truck"));
 	}
-
-
 
 	private static void printVehicles()
 	{
@@ -410,14 +480,14 @@ public class GenerateData
 	private static void printSellers()
 	{
 		System.out.println("--------------------------------------------------------------Table 3 - Sellers--------------------------------------------------------------");
-		System.out.printf("%3s %17s%12s%12s%12s%12s%12s%12s%12s\n", "#", "SellerID", "Type", "Neighborhood", "Street", "City", "State", "ZIP Code", "Brand");
+		System.out.printf("%3s %17s%12s%12s%12s%12s%12s%12s%12s%12s%12s\n", "#", "SellerID", "Type", "Neighborhood", "Street", "City", "State", "ZIP Code", "RentalPrice", "Lat", "Long");
 
 		int i=0;
 		for (Seller s : sellers)
 		{
 			i++;
 			// "#", "SellerID", "Type", "Neighborhood", "Street", "City", "State", "ZIP Code", "Brand"
-			System.out.printf("%03d %17s%12s%12s%12s%12s%12s%12s%12s\n", i, s.sellerID, s.sellerType, s.neighborhood, s.street, s.city, s.state, s.ZIP, s.brand);
+			System.out.printf("%03d %17s%12s%12s%12s%12s%12s%12s%12d%12f%12f\n", i, s.sellerID, s.sellerType, s.neighborhood, s.street, s.city, s.state, s.ZIP, s.rentalPrice, s.latitude, s.longitude);
 		}
 	}
 
@@ -425,12 +495,12 @@ public class GenerateData
 	{
 		PrintWriter writer = new PrintWriter("sellers.csv", "UTF-8");
 
-		writer.printf("%s,%s,%s,%s,%s,%s,%s,%s\n", "SellerID", "Type", "Neighborhood", "Street", "City", "State", "ZIP Code", "Brand");
+		writer.printf("%s,%s,%s,%s,%s\n", "SellerID", "Type", "RentalPrice", "Latitude", "longitude");
 
 		for (Seller s : sellers)
 		{
 			// "SellerID", "Type", "Neighborhood", "Street", "City", "State", "ZIP Code", "Brand"
-			writer.printf("%s,%s,%s,%s,%s,%s,%s,%s\n", s.sellerID, s.sellerType, s.neighborhood, s.street, s.city, s.state, s.ZIP, s.brand);
+			writer.printf("%s,%s,%d,%f,%f\n", s.sellerID, s.sellerType, s.rentalPrice, s.latitude, s.longitude);
 		}
 
 		writer.close();
@@ -442,7 +512,6 @@ public class GenerateData
 	static ArrayList<MMTPacket> mmtPackets = new ArrayList<MMTPacket>();
 	static Vehicle[] vehicles = new Vehicle[100];
 	static String[] yesNo = {"Yes", "No"};
-
 
 	public static void main(String[] args)
 	{
