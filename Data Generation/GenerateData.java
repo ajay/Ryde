@@ -510,7 +510,7 @@ public class GenerateData
 	static ArrayList<String> SellerIDs = new ArrayList<String>();
 	static ArrayList<Seller> sellers = new ArrayList<Seller>();
 	static ArrayList<MMTPacket> mmtPackets = new ArrayList<MMTPacket>();
-	static Vehicle[] vehicles = new Vehicle[100];
+	static Vehicle[] vehicles = new Vehicle[1000];
 	static String[] yesNo = {"Yes", "No"};
 
 	public static void main(String[] args)
